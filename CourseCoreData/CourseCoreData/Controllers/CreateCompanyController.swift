@@ -15,7 +15,8 @@ protocol CreateCompanyControllerDelegate {
 }
 
 class CreateCompanyController: UIViewController {
-    
+    fileprivate let padding = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    fileprivate let size = CGSize(width: 0, height: 50)
     public var delegate: CreateCompanyControllerDelegate?
     public var company: Company? {
         didSet {
@@ -28,30 +29,39 @@ class CreateCompanyController: UIViewController {
         }
     }
     
-    fileprivate let companyImageView: UIImageView = {
+    fileprivate lazy var companyImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "select_photo_empty"))
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
+        iv.layer.cornerRadius = 60
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectPhoto)))
         return iv
     }()
     
     fileprivate let selectPhotoButton: UIButton = {
         let button = UIButton(type: .system)
-        button.layer.borderWidth = 2
+        button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.black.cgColor
         button.setTitle("Select Photo", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 8
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        button.addTarget(self, action: #selector(handleSelectPhoto), for: .touchUpInside)
         return button
     }()
     
     fileprivate let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Name"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         label.widthContraint(to: 100)
         return label
     }()
     
     fileprivate let nameTextField: UITextField = {
         let tf = UITextField()
+        tf.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         tf.placeholder = "Enter Name"
         return tf
     }()
@@ -64,15 +74,18 @@ class CreateCompanyController: UIViewController {
     fileprivate let foundedLabel: UILabel = {
         let label = UILabel()
         label.text = "Founded"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         label.widthContraint(to: 100)
         return label
     }()
     
     fileprivate let foundedTextField: UITextField = {
         let tf = UITextField()
+        tf.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy"
         tf.text = dateFormatter.string(from: Date())
+        tf.isEnabled = false
         return tf
     }()
     
@@ -98,12 +111,23 @@ class CreateCompanyController: UIViewController {
     fileprivate func setupViews() {
         let backgorundView = UIView()
         backgorundView.backgroundColor = .lightBlue
+        
         view.addSubview(backgorundView)
-        backgorundView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: view.topAnchor, bottom: nil, size: .init(width: 0, height: 250))
+        backgorundView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: view.topAnchor, bottom: nil, size: .init(width: 0, height: 450))
+        
+        backgorundView.addSubview(companyImageView)
+        companyImageView.addConstraints(leading: nil, trailing: nil, top: backgorundView.topAnchor, bottom: nil, padding: .init(top: 8, left: 0, bottom: 0, right: 0), size: .init(width: 120, height: 120))
+        companyImageView.centerXAnchor.constraint(equalTo: backgorundView.centerXAnchor).isActive = true
+        
+        backgorundView.addSubview(selectPhotoButton)
+        selectPhotoButton.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: companyImageView.bottomAnchor, bottom: nil, padding: .init(top: 8, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 40))
+        
         backgorundView.addSubview(nameStackView)
-        nameStackView.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: backgorundView.topAnchor, bottom: nil, padding: .init(top: 0, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 50))
+        nameStackView.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: selectPhotoButton.bottomAnchor, bottom: nil, padding: .init(top: 8, left: 16, bottom: 0, right: 16), size: size)
+        
         backgorundView.addSubview(foundedStackView)
-        foundedStackView.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: nameStackView.bottomAnchor, bottom: nil, padding: .init(top: 0, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 50))
+        foundedStackView.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: nameStackView.bottomAnchor, bottom: nil, padding: padding, size: size)
+        
         backgorundView.addSubview(datePicker)
         datePicker.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: foundedStackView.bottomAnchor, bottom: backgorundView.bottomAnchor)
     }
@@ -112,6 +136,13 @@ class CreateCompanyController: UIViewController {
         navigationItem.title = company == nil ? "Create Company" : "Edit company"
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
+    }
+    
+    @objc fileprivate func handleSelectPhoto() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        present(imagePickerController, animated: true)
     }
     
     @objc fileprivate func handleUpdateSelectedDate(sender: UIDatePicker) {
@@ -161,6 +192,21 @@ class CreateCompanyController: UIViewController {
     }
     
     @objc fileprivate func handleCancel() {
+        dismiss(animated: true)
+    }
+}
+
+extension CreateCompanyController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            companyImageView.image = editedImage
+        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            companyImageView.image = originalImage
+        }
         dismiss(animated: true)
     }
 }
