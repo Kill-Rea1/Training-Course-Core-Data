@@ -17,6 +17,7 @@
 		EDB947B722EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EDB947B522EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodeld */; };
 		EDB947B922EA3B4C000B3640 /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB947B822EA3B4C000B3640 /* Company.swift */; };
 		EDB947BC22EA407E000B3640 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB947BB22EA407E000B3640 /* CoreDataManager.swift */; };
+		EDB947BE22EA726C000B3640 /* CompanyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB947BD22EA726C000B3640 /* CompanyCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		EDB947B622EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CourseCoreDataModels.xcdatamodel; sourceTree = "<group>"; };
 		EDB947B822EA3B4C000B3640 /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
 		EDB947BB22EA407E000B3640 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		EDB947BD22EA726C000B3640 /* CompanyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 		EDB947B022EA3A5F000B3640 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EDB947BD22EA726C000B3640 /* CompanyCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 				EDB9479E22EA39CF000B3640 /* HomeTableController.swift in Sources */,
 				EDB9479C22EA39CF000B3640 /* AppDelegate.swift in Sources */,
 				EDB947AF22EA3A59000B3640 /* CreateCompanyController.swift in Sources */,
+				EDB947BE22EA726C000B3640 /* CompanyCell.swift in Sources */,
 				EDB947B722EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodeld in Sources */,
 				EDB947B422EA3A95000B3640 /* Extensions.swift in Sources */,
 				EDB947BC22EA407E000B3640 /* CoreDataManager.swift in Sources */,
