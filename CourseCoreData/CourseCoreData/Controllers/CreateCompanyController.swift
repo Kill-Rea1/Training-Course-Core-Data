@@ -19,7 +19,12 @@ class CreateCompanyController: UIViewController {
     public var delegate: CreateCompanyControllerDelegate?
     public var company: Company? {
         didSet {
-            nameTextField.text = company?.name ?? ""
+            nameTextField.text = company?.name
+            guard let founded = company?.founded else { return }
+            datePicker.date = founded
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd, yyyy"
+            foundedTextField.text = dateFormatter.string(from: founded)
         }
     }
     
@@ -41,6 +46,7 @@ class CreateCompanyController: UIViewController {
     fileprivate let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Name"
+        label.widthContraint(to: 100)
         return label
     }()
     
@@ -48,6 +54,38 @@ class CreateCompanyController: UIViewController {
         let tf = UITextField()
         tf.placeholder = "Enter Name"
         return tf
+    }()
+    
+    fileprivate lazy var nameStackView: UIStackView = {
+        let sv = UIStackView(arrangedSubviews: [nameLabel, nameTextField])
+        return sv
+    }()
+    
+    fileprivate let foundedLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Founded"
+        label.widthContraint(to: 100)
+        return label
+    }()
+    
+    fileprivate let foundedTextField: UITextField = {
+        let tf = UITextField()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
+        tf.text = dateFormatter.string(from: Date())
+        return tf
+    }()
+    
+    fileprivate lazy var foundedStackView: UIStackView = {
+        let sv = UIStackView(arrangedSubviews: [foundedLabel, foundedTextField])
+        return sv
+    }()
+    
+    fileprivate let datePicker: UIDatePicker = {
+        let dp = UIDatePicker()
+        dp.datePickerMode = .date
+        dp.addTarget(self, action: #selector(handleUpdateSelectedDate), for: .valueChanged)
+        return dp
     }()
     
     override func viewDidLoad() {
@@ -61,11 +99,13 @@ class CreateCompanyController: UIViewController {
         let backgorundView = UIView()
         backgorundView.backgroundColor = .lightBlue
         view.addSubview(backgorundView)
-        backgorundView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: view.topAnchor, bottom: nil, size: .init(width: 0, height: 50))
-        backgorundView.addSubview(nameLabel)
-        nameLabel.addConstraints(leading: view.leadingAnchor, trailing: nil, top: view.topAnchor, bottom: nil, padding: .init(top: 0, left: 16, bottom: 0, right: 0), size: .init(width: 100, height: 50))
-        backgorundView.addSubview(nameTextField)
-        nameTextField.addConstraints(leading: nameLabel.trailingAnchor, trailing: backgorundView.trailingAnchor, top: nameLabel.topAnchor, bottom: nil, size: .init(width: 0, height: 50))
+        backgorundView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: view.topAnchor, bottom: nil, size: .init(width: 0, height: 250))
+        backgorundView.addSubview(nameStackView)
+        nameStackView.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: backgorundView.topAnchor, bottom: nil, padding: .init(top: 0, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 50))
+        backgorundView.addSubview(foundedStackView)
+        foundedStackView.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: nameStackView.bottomAnchor, bottom: nil, padding: .init(top: 0, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 50))
+        backgorundView.addSubview(datePicker)
+        datePicker.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: foundedStackView.bottomAnchor, bottom: backgorundView.bottomAnchor)
     }
     
     fileprivate func setupNavigationItems() {
@@ -74,18 +114,26 @@ class CreateCompanyController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
     }
     
+    @objc fileprivate func handleUpdateSelectedDate(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
+        foundedTextField.text = dateFormatter.string(from: sender.date)
+    }
+    
     @objc fileprivate func handleSave() {
         guard let name = nameTextField.text, name != "" else { return }
+        let date = datePicker.date
         let context = CoreDataManager.shared.persistentContainer.viewContext
         if company == nil {
-            createNewCompany(name, context: context)
+            createNewCompany(name, date: date, context: context)
         } else {
-            updateCompany(name, context: context)
+            updateCompany(name, date: date, context: context)
         }
     }
     
-    fileprivate func updateCompany(_ name: String, context: NSManagedObjectContext) {
+    fileprivate func updateCompany(_ name: String, date: Date, context: NSManagedObjectContext) {
         company?.name = name
+        company?.founded = date
         do {
             try context.save()
             dismiss(animated: true) {
@@ -96,9 +144,10 @@ class CreateCompanyController: UIViewController {
         }
     }
     
-    fileprivate func createNewCompany(_ name: String, context: NSManagedObjectContext) {
+    fileprivate func createNewCompany(_ name: String, date: Date, context: NSManagedObjectContext) {
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(name, forKey: "name")
+        company.setValue(datePicker.date, forKey: "founded")
         
         // perform save
         do {

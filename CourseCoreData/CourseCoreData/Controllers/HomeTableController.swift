@@ -55,6 +55,7 @@ class HomeTableController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = .darkBlue
         tableView.separatorColor = .white
+        tableView.allowsSelection = false
     }
     
     // MARK:- UITableView
@@ -116,7 +117,13 @@ class HomeTableController: UITableViewController {
         cell.backgroundColor = .tealColor
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = .boldSystemFont(ofSize: 16)
-        cell.textLabel?.text = company.name
+        if let name = company.name, let founded = company.founded {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd, yyyy"
+            let dateString = dateFormatter.string(from: founded)
+            let cellString = "\(name) - Founded: \(dateString)"
+            cell.textLabel?.text = cellString
+        }
         return cell
     }
 }
