@@ -124,6 +124,10 @@ class HomeTableController: UITableViewController {
             let cellString = "\(name) - Founded: \(dateString)"
             cell.textLabel?.text = cellString
         }
+        cell.imageView?.image = #imageLiteral(resourceName: "select_photo_empty")
+        if let imageData = company.imageData {
+            cell.imageView?.image = UIImage(data: imageData)
+        }
         return cell
     }
 }

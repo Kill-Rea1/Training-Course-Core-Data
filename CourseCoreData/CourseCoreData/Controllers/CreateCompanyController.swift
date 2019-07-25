@@ -26,6 +26,9 @@ class CreateCompanyController: UIViewController {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMM dd, yyyy"
             foundedTextField.text = dateFormatter.string(from: founded)
+            guard let imageData = company?.imageData else { return }
+            companyImageView.image = UIImage(data: imageData)
+            setupCircularImageStyle()
         }
     }
     
@@ -33,7 +36,6 @@ class CreateCompanyController: UIViewController {
         let iv = UIImageView(image: #imageLiteral(resourceName: "select_photo_empty"))
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
-        iv.layer.cornerRadius = 60
         iv.isUserInteractionEnabled = true
         iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectPhoto)))
         return iv
@@ -116,7 +118,7 @@ class CreateCompanyController: UIViewController {
         backgorundView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: view.topAnchor, bottom: nil, size: .init(width: 0, height: 450))
         
         backgorundView.addSubview(companyImageView)
-        companyImageView.addConstraints(leading: nil, trailing: nil, top: backgorundView.topAnchor, bottom: nil, padding: .init(top: 8, left: 0, bottom: 0, right: 0), size: .init(width: 120, height: 120))
+        companyImageView.addConstraints(leading: nil, trailing: nil, top: backgorundView.topAnchor, bottom: nil, padding: .init(top: 8, left: 0, bottom: 0, right: 0), size: .init(width: 100, height: 100))
         companyImageView.centerXAnchor.constraint(equalTo: backgorundView.centerXAnchor).isActive = true
         
         backgorundView.addSubview(selectPhotoButton)
@@ -151,20 +153,29 @@ class CreateCompanyController: UIViewController {
         foundedTextField.text = dateFormatter.string(from: sender.date)
     }
     
+    fileprivate func setupCircularImageStyle() {
+        companyImageView.layer.cornerRadius = companyImageView.frame.height / 2
+        companyImageView.layer.borderWidth = 2
+        companyImageView.layer.borderColor = UIColor.darkBlue.cgColor
+    }
+    
     @objc fileprivate func handleSave() {
         guard let name = nameTextField.text, name != "" else { return }
         let date = datePicker.date
+        guard let companyImage = companyImageView.image else { return }
+        let imageData = companyImage.jpegData(compressionQuality: 0.8)
         let context = CoreDataManager.shared.persistentContainer.viewContext
         if company == nil {
-            createNewCompany(name, date: date, context: context)
+            createNewCompany(name, date: date,  image: imageData, context: context)
         } else {
-            updateCompany(name, date: date, context: context)
+            updateCompany(name, date: date, image: imageData, context: context)
         }
     }
     
-    fileprivate func updateCompany(_ name: String, date: Date, context: NSManagedObjectContext) {
+    fileprivate func updateCompany(_ name: String, date: Date, image: Data?, context: NSManagedObjectContext) {
         company?.name = name
         company?.founded = date
+        company?.imageData = image
         do {
             try context.save()
             dismiss(animated: true) {
@@ -175,10 +186,11 @@ class CreateCompanyController: UIViewController {
         }
     }
     
-    fileprivate func createNewCompany(_ name: String, date: Date, context: NSManagedObjectContext) {
+    fileprivate func createNewCompany(_ name: String, date: Date, image: Data?, context: NSManagedObjectContext) {
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(name, forKey: "name")
         company.setValue(datePicker.date, forKey: "founded")
+        company.setValue(image, forKey: "imageData")
         
         // perform save
         do {
@@ -207,6 +219,7 @@ extension CreateCompanyController: UINavigationControllerDelegate, UIImagePicker
         } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             companyImageView.image = originalImage
         }
+        setupCircularImageStyle()
         dismiss(animated: true)
     }
 }
