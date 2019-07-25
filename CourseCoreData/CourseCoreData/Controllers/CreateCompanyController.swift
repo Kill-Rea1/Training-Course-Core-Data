@@ -11,11 +11,17 @@ import CoreData
 
 protocol CreateCompanyControllerDelegate {
     func addNewCompany(company: Company)
+    func updateCompany(company: Company)
 }
 
 class CreateCompanyController: UIViewController {
     
     public var delegate: CreateCompanyControllerDelegate?
+    public var company: Company? {
+        didSet {
+            nameTextField.text = company?.name ?? ""
+        }
+    }
     
     fileprivate let companyImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "select_photo_empty"))
@@ -63,16 +69,34 @@ class CreateCompanyController: UIViewController {
     }
     
     fileprivate func setupNavigationItems() {
-        navigationItem.title = "Create Company"
+        navigationItem.title = company == nil ? "Create Company" : "Edit company"
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
     }
     
     @objc fileprivate func handleSave() {
         guard let name = nameTextField.text, name != "" else { return }
-        
         let context = CoreDataManager.shared.persistentContainer.viewContext
-        
+        if company == nil {
+            createNewCompany(name, context: context)
+        } else {
+            updateCompany(name, context: context)
+        }
+    }
+    
+    fileprivate func updateCompany(_ name: String, context: NSManagedObjectContext) {
+        company?.name = name
+        do {
+            try context.save()
+            dismiss(animated: true) {
+                self.delegate?.updateCompany(company: self.company!)
+            }
+        } catch let updateError {
+            print("Failed to update company:", updateError)
+        }
+    }
+    
+    fileprivate func createNewCompany(_ name: String, context: NSManagedObjectContext) {
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(name, forKey: "name")
         

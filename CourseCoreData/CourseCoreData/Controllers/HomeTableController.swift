@@ -60,25 +60,32 @@ class HomeTableController: UITableViewController {
     // MARK:- UITableView
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, _) in
-            let company = self.companies[indexPath.row]
-            self.companies.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            let context = CoreDataManager.shared.persistentContainer.viewContext
-            context.delete(company)
-            do {
-                try context.save()
-            } catch let saveError {
-                print("Failed to save deleting:", saveError)
-            }
-        }
-        
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (action, _) in
-            let company = self.companies[indexPath.row]
-            action.backgroundColor = .darkBlue
-        }
-        
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: deleteHandlerAction)
+        deleteAction.backgroundColor = .lightRed
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editHandlerAction)
+        editAction.backgroundColor = .darkBlue
         return [deleteAction, editAction]
+    }
+    
+    fileprivate func deleteHandlerAction(action: UITableViewRowAction, indexPath: IndexPath) {
+        let company = self.companies[indexPath.row]
+        self.companies.remove(at: indexPath.row)
+        self.tableView.deleteRows(at: [indexPath], with: .automatic)
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        context.delete(company)
+        do {
+            try context.save()
+        } catch let saveError {
+            print("Failed to save deleting:", saveError)
+        }
+    }
+    
+    fileprivate func editHandlerAction(action: UITableViewRowAction, indexPath: IndexPath) {
+        let editCompanyController = CreateCompanyController()
+        editCompanyController.company = companies[indexPath.row]
+        editCompanyController.delegate = self
+        let navController = CustomNavigationController(rootViewController: editCompanyController)
+        present(navController, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -119,5 +126,11 @@ extension HomeTableController: CreateCompanyControllerDelegate {
         companies.append(company)
         let indexPath = IndexPath(row: companies.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
+    }
+    
+    func updateCompany(company: Company) {
+        guard let index = companies.firstIndex(of: company) else { return }
+        let indexPath = IndexPath(row: index, section: 0)
+        tableView.reloadRows(at: [indexPath], with: .middle)
     }
 }
