@@ -1,25 +1,42 @@
 //
 //  ViewController.swift
-//  CoreData
+//  CourseCoreData
 //
 //  Created by Кирилл Иванов on 25/07/2019.
 //  Copyright © 2019 Kirill Ivanoff. All rights reserved.
 //
 
 import UIKit
+import CoreData
 
 class HomeTableController: UITableViewController {
-    
+
     fileprivate let companyCellId = "companyCell"
-    fileprivate var companies = [
-        Company(name: "Apple", founded: Date()),
-        Company(name: "Google", founded: Date())
-    ]
+        fileprivate var companies = [Company]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         setupNavigationItem()
+        fetchCompanies()
+    }
+    
+    fileprivate func fetchCompanies() {
+        let persistentContainer = NSPersistentContainer(name: "CourseCoreDataModels")
+        persistentContainer.loadPersistentStores { (storeDescription, error) in
+            if let error = error {
+                print("Loading to store failed:", error)
+                return
+            }
+        }
+        let context = persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
+        do {
+            let _companies = try context.fetch(fetchRequest)
+            _companies.forEach({print($0.name ?? "")})
+        } catch let fetchError {
+            print("Failed to fetch companies:", fetchError)
+        }
     }
     
     fileprivate func setupNavigationItem() {

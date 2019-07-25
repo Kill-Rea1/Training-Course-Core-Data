@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  CoreData
+//  CourseCoreData
 //
 //  Created by Кирилл Иванов on 25/07/2019.
 //  Copyright © 2019 Kirill Ivanoff. All rights reserved.
@@ -14,13 +14,14 @@ class CustomNavigationController: UINavigationController {
     }
 }
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
+
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         setupNavigationBarStyle()
         
         window = UIWindow()

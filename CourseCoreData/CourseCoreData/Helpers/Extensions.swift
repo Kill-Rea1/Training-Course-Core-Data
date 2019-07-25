@@ -1,6 +1,6 @@
 //
-//  Helpers.swift
-//  CoreData
+//  Extensions.swift
+//  CourseCoreData
 //
 //  Created by Кирилл Иванов on 25/07/2019.
 //  Copyright © 2019 Kirill Ivanoff. All rights reserved.

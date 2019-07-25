@@ -1,12 +1,13 @@
 //
 //  CreateCompanyController.swift
-//  CoreData
+//  CourseCoreData
 //
 //  Created by Кирилл Иванов on 25/07/2019.
 //  Copyright © 2019 Kirill Ivanoff. All rights reserved.
 //
 
 import UIKit
+import CoreData
 
 protocol CreateCompanyControllerDelegate {
     func addNewCompany(company: Company)
@@ -69,9 +70,23 @@ class CreateCompanyController: UIViewController {
     
     @objc fileprivate func handleSave() {
         guard let name = nameTextField.text, name != "" else { return }
-        let company = Company(name: name, founded: Date())
-        dismiss(animated: true) {
-            self.delegate?.addNewCompany(company: company)
+        
+        let persistentContainer = NSPersistentContainer(name: "CourseCoreDataModels")
+        persistentContainer.loadPersistentStores { (storeDescription, error) in
+            if let error = error {
+                print("Loading to store failed:", error)
+                return
+            }
+        }
+        let context = persistentContainer.viewContext
+        let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
+        company.setValue(name, forKey: "name")
+        
+        // perform save
+        do {
+            try context.save()
+        } catch let saveError {
+            print("Failed to save company:", saveError)
         }
     }
     
