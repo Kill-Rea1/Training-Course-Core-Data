@@ -14,6 +14,7 @@
 		EDB9477322EA0D67000B3640 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EDB9477122EA0D67000B3640 /* LaunchScreen.storyboard */; };
 		EDB9477F22EA170A000B3640 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB9477E22EA170A000B3640 /* Helpers.swift */; };
 		EDB9478122EA1B40000B3640 /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB9478022EA1B40000B3640 /* Company.swift */; };
+		EDB9478322EA1E23000B3640 /* CreateCompanyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB9478222EA1E23000B3640 /* CreateCompanyController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		EDB9477422EA0D67000B3640 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EDB9477E22EA170A000B3640 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		EDB9478022EA1B40000B3640 /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
+		EDB9478222EA1E23000B3640 /* CreateCompanyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCompanyController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				EDB9476A22EA0D66000B3640 /* HomeTableController.swift */,
+				EDB9478222EA1E23000B3640 /* CreateCompanyController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 			files = (
 				EDB9476B22EA0D66000B3640 /* HomeTableController.swift in Sources */,
 				EDB9477F22EA170A000B3640 /* Helpers.swift in Sources */,
+				EDB9478322EA1E23000B3640 /* CreateCompanyController.swift in Sources */,
 				EDB9476922EA0D66000B3640 /* AppDelegate.swift in Sources */,
 				EDB9478122EA1B40000B3640 /* Company.swift in Sources */,
 			);

@@ -11,6 +11,10 @@ import UIKit
 class HomeTableController: UITableViewController {
     
     fileprivate let companyCellId = "companyCell"
+    fileprivate var companies = [
+        Company(name: "Apple", founded: Date()),
+        Company(name: "Google", founded: Date())
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +33,10 @@ class HomeTableController: UITableViewController {
     }
     
     @objc fileprivate func handleAddCompany() {
-        
+        let createCompanyController = CreateCompanyController()
+        createCompanyController.delegate = self
+        let navController = CustomNavigationController(rootViewController: createCompanyController)
+        present(navController, animated: true)
     }
     
     fileprivate func setupTableView() {
@@ -45,12 +52,13 @@ class HomeTableController: UITableViewController {
         let headerView = UIView()
         headerView.backgroundColor = .lightBlue
         let imageView = UIImageView(image: #imageLiteral(resourceName: "profile2"))
-        imageView.widthContraint(to: 50)
+        imageView.widthContraint(to: 26)
         let label = UILabel()
-        label.text = "Name"
+        label.text = "Names"
         let stackView = UIStackView(arrangedSubviews: [imageView, label])
         headerView.addSubview(stackView)
-        stackView.fillSuperview()
+        stackView.spacing = 16
+        stackView.fillSuperview(padding: .init(top: 12, left: 16, bottom: 12, right: 16))
         return headerView
     }
     
@@ -59,12 +67,24 @@ class HomeTableController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return companies.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: companyCellId, for: indexPath)
+        let company = companies[indexPath.row]
         cell.backgroundColor = .tealColor
+        cell.textLabel?.textColor = .white
+        cell.textLabel?.font = .boldSystemFont(ofSize: 16)
+        cell.textLabel?.text = company.name
         return cell
+    }
+}
+
+extension HomeTableController: CreateCompanyControllerDelegate {
+    func addNewCompany(company: Company) {
+        companies.append(company)
+        let indexPath = IndexPath(row: companies.count - 1, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
     }
 }
