@@ -16,6 +16,7 @@
 		EDB947B422EA3A95000B3640 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB947B322EA3A95000B3640 /* Extensions.swift */; };
 		EDB947B722EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EDB947B522EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodeld */; };
 		EDB947B922EA3B4C000B3640 /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB947B822EA3B4C000B3640 /* Company.swift */; };
+		EDB947BC22EA407E000B3640 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB947BB22EA407E000B3640 /* CoreDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		EDB947B322EA3A95000B3640 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		EDB947B622EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CourseCoreDataModels.xcdatamodel; sourceTree = "<group>"; };
 		EDB947B822EA3B4C000B3640 /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
+		EDB947BB22EA407E000B3640 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 		EDB9479A22EA39CF000B3640 /* CourseCoreData */ = {
 			isa = PBXGroup;
 			children = (
+				EDB947BA22EA4066000B3640 /* CoreDataManager */,
 				EDB947B222EA3A88000B3640 /* Helpers */,
 				EDB947B122EA3A64000B3640 /* Models */,
 				EDB947B022EA3A5F000B3640 /* Views */,
@@ -106,6 +109,14 @@
 				EDB947B322EA3A95000B3640 /* Extensions.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		EDB947BA22EA4066000B3640 /* CoreDataManager */ = {
+			isa = PBXGroup;
+			children = (
+				EDB947BB22EA407E000B3640 /* CoreDataManager.swift */,
+			);
+			path = CoreDataManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -184,6 +195,7 @@
 				EDB947AF22EA3A59000B3640 /* CreateCompanyController.swift in Sources */,
 				EDB947B722EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodeld in Sources */,
 				EDB947B422EA3A95000B3640 /* Extensions.swift in Sources */,
+				EDB947BC22EA407E000B3640 /* CoreDataManager.swift in Sources */,
 				EDB947B922EA3B4C000B3640 /* Company.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
