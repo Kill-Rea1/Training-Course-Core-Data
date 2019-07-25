@@ -12,7 +12,21 @@ import CoreData
 class HomeTableController: UITableViewController {
 
     fileprivate let companyCellId = "companyCell"
-        fileprivate var companies = [Company]()
+    fileprivate var companies = [Company]()
+    
+    fileprivate let headerView: UIView = {
+        let headerView = UIView()
+        headerView.backgroundColor = .lightBlue
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "profile2"))
+        imageView.widthContraint(to: 26)
+        let label = UILabel()
+        label.text = "Names"
+        let stackView = UIStackView(arrangedSubviews: [imageView, label])
+        headerView.addSubview(stackView)
+        stackView.spacing = 16
+        stackView.fillSuperview(padding: .init(top: 12, left: 16, bottom: 12, right: 16))
+        return headerView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +78,7 @@ class HomeTableController: UITableViewController {
     }
     
     fileprivate func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: companyCellId)
+        tableView.register(CompanyCell.self, forCellReuseIdentifier: companyCellId)
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = .darkBlue
         tableView.separatorColor = .white
@@ -118,16 +132,6 @@ class HomeTableController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = .lightBlue
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "profile2"))
-        imageView.widthContraint(to: 26)
-        let label = UILabel()
-        label.text = "Names"
-        let stackView = UIStackView(arrangedSubviews: [imageView, label])
-        headerView.addSubview(stackView)
-        stackView.spacing = 16
-        stackView.fillSuperview(padding: .init(top: 12, left: 16, bottom: 12, right: 16))
         return headerView
     }
     
@@ -140,23 +144,14 @@ class HomeTableController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: companyCellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: companyCellId, for: indexPath) as! CompanyCell
         let company = companies[indexPath.row]
-        cell.backgroundColor = .tealColor
-        cell.textLabel?.textColor = .white
-        cell.textLabel?.font = .boldSystemFont(ofSize: 16)
-        if let name = company.name, let founded = company.founded {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMM dd, yyyy"
-            let dateString = dateFormatter.string(from: founded)
-            let cellString = "\(name) - Founded: \(dateString)"
-            cell.textLabel?.text = cellString
-        }
-        cell.imageView?.image = #imageLiteral(resourceName: "select_photo_empty")
-        if let imageData = company.imageData {
-            cell.imageView?.image = UIImage(data: imageData)
-        }
+        cell.company = company
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
     }
 }
 
