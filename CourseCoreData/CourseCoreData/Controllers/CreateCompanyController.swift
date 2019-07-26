@@ -9,11 +9,6 @@
 import UIKit
 import CoreData
 
-protocol CreateCompanyControllerDelegate {
-    func addNewCompany(company: Company)
-    func updateCompany(company: Company)
-}
-
 class CreateCompanyController: UIViewController {
     fileprivate let padding = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     fileprivate let size = CGSize(width: 0, height: 50)
@@ -164,42 +159,39 @@ class CreateCompanyController: UIViewController {
         let date = datePicker.date
         guard let companyImage = companyImageView.image else { return }
         let imageData = companyImage.jpegData(compressionQuality: 0.8)
-        let context = CoreDataManager.shared.persistentContainer.viewContext
         if company == nil {
-            createNewCompany(name, date: date,  image: imageData, context: context)
+            createNewCompany(name, date: date,  image: imageData)
         } else {
-            updateCompany(name, date: date, image: imageData, context: context)
+            updateCompany(name, date: date, image: imageData)
         }
     }
     
-    fileprivate func updateCompany(_ name: String, date: Date, image: Data?, context: NSManagedObjectContext) {
+    fileprivate func updateCompany(_ name: String, date: Date, image: Data?) {
         company?.name = name
         company?.founded = date
         company?.imageData = image
-        do {
-            try context.save()
-            dismiss(animated: true) {
-                self.delegate?.updateCompany(company: self.company!)
+        CoreDataManager.shared.saveCompany(company!) { [weak self] (error) in
+            if error != nil {
+                return
             }
-        } catch let updateError {
-            print("Failed to update company:", updateError)
+            self?.dismiss(animated: true, completion: {
+                self?.delegate?.updateCompany(company: (self?.company)!)
+            })
         }
     }
     
-    fileprivate func createNewCompany(_ name: String, date: Date, image: Data?, context: NSManagedObjectContext) {
-        let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
+    fileprivate func createNewCompany(_ name: String, date: Date, image: Data?) {
+        let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: CoreDataManager.shared.persistentContainer.viewContext)
         company.setValue(name, forKey: "name")
         company.setValue(datePicker.date, forKey: "founded")
         company.setValue(image, forKey: "imageData")
-        
-        // perform save
-        do {
-            try context.save()
-            dismiss(animated: true) {
-                self.delegate?.addNewCompany(company: company as! Company)
+        CoreDataManager.shared.saveCompany(company as! Company) { [weak self] (error) in
+            if error != nil {
+                return
             }
-        } catch let saveError {
-            print("Failed to save company:", saveError)
+            self?.dismiss(animated: true, completion: {
+                self?.delegate?.addNewCompany(company: company as! Company)
+            })
         }
     }
     

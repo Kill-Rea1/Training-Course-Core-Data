@@ -21,4 +21,44 @@ struct CoreDataManager {
         }
         return container
     }()
+    
+    func fetchCompanies() -> [Company] {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
+        do {
+            let companies = try context.fetch(fetchRequest)
+            return companies
+        } catch let fetchError {
+            print("Failed to fetch companies:", fetchError)
+            return []
+        }
+    }
+    
+    func saveCompany(_ company: Company, completion: @escaping (Error?) -> ()) {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        do {
+            try context.save()
+            completion(nil)
+        } catch let updateError {
+            print("Failed to update company:", updateError)
+            completion(updateError)
+        }
+    }
+    
+    func deleteCompanies(_ companies: [Company]) -> [IndexPath] {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: Company.fetchRequest())
+        do {
+            try context.execute(batchDeleteRequest)
+            var indexPaths = [IndexPath]()
+            for (index, _) in companies.enumerated() {
+                let indexPath = IndexPath(row: index, section: 0)
+                indexPaths.append(indexPath)
+            }
+            return indexPaths
+        } catch let deleteError {
+            print("Failed to delete all companies:", deleteError)
+            return []
+        }
+    }
 }
