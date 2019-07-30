@@ -61,4 +61,18 @@ struct CoreDataManager {
             return []
         }
     }
+    
+    func saveEmployee(_ employeeName: String, company: Company, completion: @escaping (Error?, Employee?) -> ()) {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
+        employee.setValue(employeeName, forKey: "name")
+        employee.company = company
+        do {
+            try context.save()
+            completion(nil, employee)
+        } catch let saveError {
+            print("Failed to save employee:", saveError)
+            completion(saveError, nil)
+        }
+    }
 }

@@ -78,3 +78,23 @@ extension UIView {
         heightAnchor.constraint(equalToConstant: constant).isActive = true
     }
 }
+
+extension UIViewController {
+    func setupPlusButtonInNavBar(selector: Selector) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "plus"), style: .plain, target: self, action: selector)
+    }
+    
+    func setupCreatControllersButtons(cancel: Selector, save: Selector) {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: cancel)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: save)
+    }
+    
+    func setupLightBlueBackground(height: CGFloat) -> UIView {
+        let backgorundView = UIView()
+        backgorundView.backgroundColor = .lightBlue
+        
+        view.addSubview(backgorundView)
+        backgorundView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: view.topAnchor, bottom: nil, size: .init(width: 0, height: height))
+        return backgorundView
+    }
+}

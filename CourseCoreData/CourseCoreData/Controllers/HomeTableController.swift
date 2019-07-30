@@ -41,7 +41,7 @@ class HomeTableController: UITableViewController {
     
     fileprivate func setupNavigationItem() {
         navigationItem.title = "Companies"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "plus"), style: .plain, target: self, action: #selector(handleAddCompany))
+        setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleResetCompanies))
     }
     
@@ -63,6 +63,5 @@ class HomeTableController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = .darkBlue
         tableView.separatorColor = .white
-        tableView.allowsSelection = false
     }
 }

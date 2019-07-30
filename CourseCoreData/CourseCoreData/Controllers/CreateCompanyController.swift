@@ -106,33 +106,28 @@ class CreateCompanyController: UIViewController {
     }
     
     fileprivate func setupViews() {
-        let backgorundView = UIView()
-        backgorundView.backgroundColor = .lightBlue
+        let backgorundView = setupLightBlueBackground(height: 450)
         
-        view.addSubview(backgorundView)
-        backgorundView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: view.topAnchor, bottom: nil, size: .init(width: 0, height: 450))
+        view.addSubview(companyImageView)
+        companyImageView.addConstraints(leading: nil, trailing: nil, top: view.topAnchor, bottom: nil, padding: .init(top: 8, left: 0, bottom: 0, right: 0), size: .init(width: 100, height: 100))
+        companyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        backgorundView.addSubview(companyImageView)
-        companyImageView.addConstraints(leading: nil, trailing: nil, top: backgorundView.topAnchor, bottom: nil, padding: .init(top: 8, left: 0, bottom: 0, right: 0), size: .init(width: 100, height: 100))
-        companyImageView.centerXAnchor.constraint(equalTo: backgorundView.centerXAnchor).isActive = true
+        view.addSubview(selectPhotoButton)
+        selectPhotoButton.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: companyImageView.bottomAnchor, bottom: nil, padding: .init(top: 8, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 40))
         
-        backgorundView.addSubview(selectPhotoButton)
-        selectPhotoButton.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: companyImageView.bottomAnchor, bottom: nil, padding: .init(top: 8, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 40))
+        view.addSubview(nameStackView)
+        nameStackView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: selectPhotoButton.bottomAnchor, bottom: nil, padding: .init(top: 8, left: 16, bottom: 0, right: 16), size: size)
         
-        backgorundView.addSubview(nameStackView)
-        nameStackView.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: selectPhotoButton.bottomAnchor, bottom: nil, padding: .init(top: 8, left: 16, bottom: 0, right: 16), size: size)
+        view.addSubview(foundedStackView)
+        foundedStackView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: nameStackView.bottomAnchor, bottom: nil, padding: padding, size: size)
         
-        backgorundView.addSubview(foundedStackView)
-        foundedStackView.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: nameStackView.bottomAnchor, bottom: nil, padding: padding, size: size)
-        
-        backgorundView.addSubview(datePicker)
-        datePicker.addConstraints(leading: backgorundView.leadingAnchor, trailing: backgorundView.trailingAnchor, top: foundedStackView.bottomAnchor, bottom: backgorundView.bottomAnchor)
+        view.addSubview(datePicker)
+        datePicker.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: foundedStackView.bottomAnchor, bottom: backgorundView.bottomAnchor)
     }
     
     fileprivate func setupNavigationItems() {
         navigationItem.title = company == nil ? "Create Company" : "Edit company"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
+        setupCreatControllersButtons(cancel: #selector(handleCancel), save: #selector(handleSave))
     }
     
     @objc fileprivate func handleSelectPhoto() {
