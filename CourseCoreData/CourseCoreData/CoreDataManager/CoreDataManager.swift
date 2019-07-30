@@ -62,11 +62,12 @@ struct CoreDataManager {
         }
     }
     
-    func saveEmployee(_ employeeName: String, company: Company, completion: @escaping (Error?, Employee?) -> ()) {
+    func saveEmployee(_ employeeName: String, birthday: Date, company: Company, completion: @escaping (Error?, Employee?) -> ()) {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
         employee.setValue(employeeName, forKey: "name")
         employee.company = company
+        employee.employeeInformation?.birthday = birthday
         do {
             try context.save()
             completion(nil, employee)
