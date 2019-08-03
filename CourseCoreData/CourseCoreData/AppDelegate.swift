@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow()
         window?.makeKeyAndVisible()
-        window?.rootViewController = CustomNavigationController(rootViewController: HomeTableController())
+        window?.rootViewController = CustomNavigationController(rootViewController: CompaniesAutoUpdateController())
         return true
     }
     

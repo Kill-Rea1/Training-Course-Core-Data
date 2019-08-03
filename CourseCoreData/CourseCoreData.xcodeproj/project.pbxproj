@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		EDA07CF822F5D736005E89F7 /* EmployeeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA07CF722F5D736005E89F7 /* EmployeeType.swift */; };
+		EDA07CFA22F5FD68005E89F7 /* CompaniesAutoUpdateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA07CF922F5FD68005E89F7 /* CompaniesAutoUpdateController.swift */; };
 		EDB9479C22EA39CF000B3640 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB9479B22EA39CF000B3640 /* AppDelegate.swift */; };
 		EDB9479E22EA39CF000B3640 /* HomeTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB9479D22EA39CF000B3640 /* HomeTableController.swift */; };
 		EDB947A122EA39CF000B3640 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EDB9479F22EA39CF000B3640 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		EDA07CF722F5D736005E89F7 /* EmployeeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeType.swift; sourceTree = "<group>"; };
+		EDA07CF922F5FD68005E89F7 /* CompaniesAutoUpdateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompaniesAutoUpdateController.swift; sourceTree = "<group>"; };
 		EDB9479822EA39CF000B3640 /* CourseCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CourseCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EDB9479B22EA39CF000B3640 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EDB9479D22EA39CF000B3640 /* HomeTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableController.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				EDB947AE22EA3A59000B3640 /* CreateCompanyController.swift */,
 				EDB947C422F07E67000B3640 /* EmployeesController.swift */,
 				EDB947C622F0809A000B3640 /* CreateEmployeeController.swift */,
+				EDA07CF922F5FD68005E89F7 /* CompaniesAutoUpdateController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 				EDB947C222EA78C5000B3640 /* HomeTableController+TableViewDelegates.swift in Sources */,
 				EDB947B422EA3A95000B3640 /* Extensions.swift in Sources */,
 				EDB947BC22EA407E000B3640 /* CoreDataManager.swift in Sources */,
+				EDA07CFA22F5FD68005E89F7 /* CompaniesAutoUpdateController.swift in Sources */,
 				EDB947B922EA3B4C000B3640 /* Company.swift in Sources */,
 				EDA07CF822F5D736005E89F7 /* EmployeeType.swift in Sources */,
 			);

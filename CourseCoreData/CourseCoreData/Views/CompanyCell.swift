@@ -12,10 +12,12 @@ class CompanyCell: UITableViewCell {
     
     public var company: Company? {
         didSet {
-//            guard let founded = company?.founded else { return }
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "MMM dd, yyyy"
-            companyLabel.text = "\(company?.name ?? "") "//- Founded: \(dateFormatter.string(from: founded))"
+            companyLabel.text = company?.name
+            if let founded = company?.founded {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM dd, yyyy"
+                companyLabel.text = "\(company?.name ?? "") - Founded: \(dateFormatter.string(from: founded))"
+            }
             guard let imageData = company?.imageData else { return }
             companyImageView.image = UIImage(data: imageData)
         }
