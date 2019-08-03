@@ -44,20 +44,50 @@ class HomeTableController: UITableViewController {
         setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleResetCompanies)),
-            UIBarButtonItem(title: "Do Work", style: .plain, target: self, action: #selector(handleDoWork))
+            UIBarButtonItem(title: "Do Updates", style: .plain, target: self, action: #selector(handleDoUpdates))
         ]
+    }
+    
+    @objc fileprivate func handleDoUpdates() {
+        CoreDataManager.shared.persistentContainer.performBackgroundTask { (backgroundContext) in
+            let request: NSFetchRequest<Company> = Company.fetchRequest()
+            do {
+                let companies = try backgroundContext.fetch(request)
+                
+                companies.forEach({ (company) in
+                    company.name = "A: \(company.name ?? "")"
+                })
+                
+                do {
+                    try backgroundContext.save()
+                    DispatchQueue.main.async {
+                        CoreDataManager.shared.persistentContainer.viewContext.reset()
+                        self.companies = CoreDataManager.shared.fetchCompanies()
+                        self.tableView.reloadData()
+                    }
+                } catch let saveErr {
+                    print("Failed to save on background:", saveErr)
+                }
+            } catch let err {
+                print("Failed to fetch on background:", err)
+            }
+         }
     }
     
     @objc fileprivate func handleDoWork() {
         
         CoreDataManager.shared.persistentContainer.performBackgroundTask { (backgroundContext) in
-            (0...20000).forEach { (value) in
+            (0...100).forEach { (value) in
                 print(value)
                 let company = Company(context: backgroundContext)
                 company.name = String(value)
             }
             do {
                 try backgroundContext.save()
+                DispatchQueue.main.async {
+                    self.companies = CoreDataManager.shared.fetchCompanies()
+                    self.tableView.reloadData()
+                }
             } catch let error {
                 print("Failed to save:", error)
             }
