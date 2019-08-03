@@ -42,7 +42,33 @@ class HomeTableController: UITableViewController {
     fileprivate func setupNavigationItem() {
         navigationItem.title = "Companies"
         setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleResetCompanies))
+        navigationItem.leftBarButtonItems = [
+            UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleResetCompanies)),
+            UIBarButtonItem(title: "Do Work", style: .plain, target: self, action: #selector(handleDoWork))
+        ]
+    }
+    
+    @objc fileprivate func handleDoWork() {
+        
+        CoreDataManager.shared.persistentContainer.performBackgroundTask { (backgroundContext) in
+            (0...20000).forEach { (value) in
+                print(value)
+                let company = Company(context: backgroundContext)
+                company.name = String(value)
+            }
+            do {
+                try backgroundContext.save()
+            } catch let error {
+                print("Failed to save:", error)
+            }
+        }
+        
+        // GCD
+        DispatchQueue.global(qos: .background).async {
+            // creating some Company
+//            let context = CoreDataManager.shared.persistentContainer.viewContext
+            
+        }
     }
     
     @objc fileprivate func handleResetCompanies() {
