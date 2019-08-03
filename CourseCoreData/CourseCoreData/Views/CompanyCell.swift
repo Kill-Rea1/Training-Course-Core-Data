@@ -12,7 +12,7 @@ class CompanyCell: UITableViewCell {
     
     public var company: Company? {
         didSet {
-            companyLabel.text = company?.name
+            companyLabel.text = "\(company?.name ?? "")  \(company?.numEmployees ?? "")"
             if let founded = company?.founded {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MMM dd, yyyy"
