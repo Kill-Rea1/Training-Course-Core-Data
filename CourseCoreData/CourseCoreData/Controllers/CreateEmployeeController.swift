@@ -59,6 +59,19 @@ class CreateEmployeeController: UIViewController {
         return sv
     }()
     
+    fileprivate let employeeTypeSegmentedControl: UISegmentedControl = {
+        let types = [
+            EmployeeType.Executive.rawValue,
+            EmployeeType.SeniorManagement.rawValue,
+            EmployeeType.Staff.rawValue
+        ]
+        
+        let sc = UISegmentedControl(items: types)
+        sc.selectedSegmentIndex = 0
+        sc.tintColor = UIColor.darkBlue
+        return sc
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -70,11 +83,13 @@ class CreateEmployeeController: UIViewController {
     }
     
     fileprivate func setupViews() {
-        _ = setupLightBlueBackground(height: 100)
+        _ = setupLightBlueBackground(height: 150)
         view.addSubview(nameStackView)
         nameStackView.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: view.topAnchor, bottom: nil, padding: .init(top: 0, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 50))
         view.addSubview(birthdayStack)
         birthdayStack.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: nameStackView.bottomAnchor, bottom: nil, padding: .init(top: 0, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 50))
+        view.addSubview(employeeTypeSegmentedControl)
+        employeeTypeSegmentedControl.addConstraints(leading: view.leadingAnchor, trailing: view.trailingAnchor, top: birthdayStack.bottomAnchor, bottom: nil, padding: .init(top: 0, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 34))
     }
     
     @objc fileprivate func handleCancel() {
@@ -88,6 +103,7 @@ class CreateEmployeeController: UIViewController {
     }
     
     @objc fileprivate func handleSave() {
+        view.endEditing(true)
         guard let name = nameTextField.text else { return }
         guard let birthday = birthdayTextField.text, birthday != "" else {
             showError(title: "Blank Birthday", message: "You have not entered a birthday.")
@@ -99,7 +115,8 @@ class CreateEmployeeController: UIViewController {
             showError(title: "Bad Date", message: "Birthday date entered not valid.")
             return
         }
-        CoreDataManager.shared.saveEmployee(name, birthday: birthdayDate, company: company) { [weak self] (error, employee) in
+        guard let employeeType = employeeTypeSegmentedControl.titleForSegment(at: employeeTypeSegmentedControl.selectedSegmentIndex) else { return }
+        CoreDataManager.shared.saveEmployee(name, birthday: birthdayDate, employeeType: employeeType, company: company) { [weak self] (error, employee) in
             if error != nil {
                 return
             }
