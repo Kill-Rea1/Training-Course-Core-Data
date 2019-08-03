@@ -39,12 +39,50 @@ class HomeTableController: UITableViewController {
         tableView.reloadData()
     }
     
+    @objc fileprivate func handleDoNestedUpdates() {
+        DispatchQueue.global(qos: .background).async {
+            let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            privateContext.parent = CoreDataManager.shared.persistentContainer.viewContext
+            // execute updates on privateContext
+            let request: NSFetchRequest<Company> = Company.fetchRequest()
+            request.fetchLimit = 1
+            do {
+                let companies = try privateContext.fetch(request)
+                companies.forEach({ (company) in
+                    print(company.name ?? "")
+                    company.name = "A: \(company.name ?? "")"
+                })
+                
+                do {
+                    try privateContext.save()
+                    // after save succeeds
+                    
+                    DispatchQueue.main.async {
+                        do {
+                            let context = CoreDataManager.shared.persistentContainer.viewContext
+                            if context.hasChanges {
+                                try context.save()
+                            }
+                        } catch let saveErr {
+                            print("Failed to save on mainContext:", saveErr)
+                        }
+                        self.tableView.reloadData()
+                    }
+                } catch let saveErr {
+                    print("Failed to save on privateContext:", saveErr)
+                }
+            } catch let fetchErr {
+                print("Failed to fetch on privateContext:", fetchErr)
+            }
+        }
+    }
+    
     fileprivate func setupNavigationItem() {
         navigationItem.title = "Companies"
         setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleResetCompanies)),
-            UIBarButtonItem(title: "Do Updates", style: .plain, target: self, action: #selector(handleDoUpdates))
+            UIBarButtonItem(title: "Nested Updates", style: .plain, target: self, action: #selector(handleDoNestedUpdates))
         ]
     }
     
