@@ -40,24 +40,31 @@ class CompaniesAutoUpdateController: UITableViewController {
             UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(handleAdd)),
             UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(handleDelete))
         ]
-        
         fetchedResultsController.fetchedObjects?.forEach({ (company) in
-            print(company.name ?? "")
+            print(company.photoUrl ?? "")
         })
         tableView.register(CompanyCell.self, forCellReuseIdentifier: cellId)
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        refreshControl.tintColor = .white
+        self.refreshControl = refreshControl
+    }
+    
+    @objc fileprivate func handleRefresh() {
+        Service.shared.fetchAPI()
+        refreshControl?.endRefreshing()
     }
     
     @objc fileprivate func handleDelete() {
         
         let request: NSFetchRequest<Company> = Company.fetchRequest()
-        request.predicate = NSPredicate(format: "name CONTAINS %@", "B")
+//        request.predicate = NSPredicate(format: "name CONTAINS %@", "")
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let companiesWithB = try? context.fetch(request)
         companiesWithB?.forEach({ (company) in
             context.delete(company)
         })
         try? context.save()
-        
     }
     
     @objc fileprivate func handleAdd() {
@@ -99,6 +106,12 @@ class CompaniesAutoUpdateController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let employeesController = EmployeesController()
+        employeesController.company = fetchedResultsController.object(at: indexPath)
+        navigationController?.pushViewController(employeesController, animated: true)
     }
 }
 

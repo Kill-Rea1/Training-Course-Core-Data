@@ -4,6 +4,7 @@
         <attribute name="founded" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="photoUrl" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="employees" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Employee" inverseName="company" inverseEntity="Employee" syncable="YES"/>
     </entity>
     <entity name="Employee" representedClassName="Employee" syncable="YES" codeGenerationType="class">
@@ -25,7 +26,7 @@
         <relationship name="employee" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Employee" inverseName="employeeInformation" inverseEntity="Employee" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Company" positionX="-687.42578125" positionY="-101.96875" width="128" height="103"/>
+        <element name="Company" positionX="-687.42578125" positionY="-101.96875" width="128" height="120"/>
         <element name="Employee" positionX="-473.5703125" positionY="9.46484375" width="128" height="118"/>
         <element name="EmployeeAddress" positionX="-163.3828125" positionY="-84.59375" width="128" height="105"/>
         <element name="EmployeeInformation" positionX="-195.8515625" positionY="141.89453125" width="128" height="88"/>

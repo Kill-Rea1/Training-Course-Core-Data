@@ -18,7 +18,19 @@ class CompanyCell: UITableViewCell {
                 dateFormatter.dateFormat = "MMM dd, yyyy"
                 companyLabel.text = "\(company?.name ?? "") - Founded: \(dateFormatter.string(from: founded))"
             }
-            guard let imageData = company?.imageData else { return }
+            guard let imageData = company?.imageData else {
+                Service.shared.fetchImageData(urlString: company?.photoUrl ?? "") { (error, data) in
+                    if error != nil {
+                        return
+                    }
+                    
+                    guard let data = data else { return }
+                    DispatchQueue.main.async {
+                        self.company?.imageData = data
+                    }
+                }
+                return
+            }
             companyImageView.image = UIImage(data: imageData)
         }
     }
