@@ -45,7 +45,7 @@ struct Service {
                         
                         let employee = Employee(context: privateContext)
                         employee.company = company
-                        employee.name = jsonEmployee.name
+                        employee.fullName = jsonEmployee.name
                         employee.type = jsonEmployee.type
                         let employeeInformation = EmployeeInformation(context: privateContext)
                         employeeInformation.birthday = dateFormatter.date(from: jsonEmployee.birthday)

@@ -33,6 +33,7 @@
 		EDA07CF922F5FD68005E89F7 /* CompaniesAutoUpdateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompaniesAutoUpdateController.swift; sourceTree = "<group>"; };
 		EDA07CFB22F60A7A005E89F7 /* JSONCompany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCompany.swift; sourceTree = "<group>"; };
 		EDA07CFE22F60B9D005E89F7 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		EDA07D0022F62565005E89F7 /* CourseCoreDataModels_v1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CourseCoreDataModels_v1.1.xcdatamodel; sourceTree = "<group>"; };
 		EDB9479822EA39CF000B3640 /* CourseCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CourseCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EDB9479B22EA39CF000B3640 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EDB9479D22EA39CF000B3640 /* HomeTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableController.swift; sourceTree = "<group>"; };
@@ -453,9 +454,10 @@
 		EDB947B522EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				EDA07D0022F62565005E89F7 /* CourseCoreDataModels_v1.1.xcdatamodel */,
 				EDB947B622EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodel */,
 			);
-			currentVersion = EDB947B622EA3AC0000B3640 /* CourseCoreDataModels.xcdatamodel */;
+			currentVersion = EDA07D0022F62565005E89F7 /* CourseCoreDataModels_v1.1.xcdatamodel */;
 			path = CourseCoreDataModels.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
